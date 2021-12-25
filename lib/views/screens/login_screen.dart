@@ -1,7 +1,7 @@
 import 'package:easy_deals/services/auth_controllers.dart';
 import 'package:easy_deals/views/screens/home_screen.dart';
 import 'package:easy_deals/views/screens/registration_screen.dart';
-import 'package:easy_deals/views/widgets/AuthButton.dart';
+import 'package:easy_deals/views/components/auth_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -47,16 +47,22 @@ class _LoginScreenState extends State<LoginScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Image.asset(
-                  'images/trolley.png',
-                  width: 40.0,
+                Hero(
+                  tag: 'logo',
+                  child: Image.asset(
+                    'images/trolley.png',
+                    width: 40.0,
+                  ),
                 ),
-                Text(
-                  'Login to your account',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 20.0,
+                Hero(
+                  tag: 'title-text',
+                  child: Text(
+                    'Login to your account',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontWeight: FontWeight.w900,
+                      fontSize: 20.0,
+                    ),
                   ),
                 )
               ],
@@ -119,57 +125,66 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(
               height: 20.0,
             ),
-            AuthButton(
-              onPressed: () async {
-                setState(() {
-                  _normalLoading = true;
-                });
-                dynamic response = await normalSignIn(
-                    _emailController.text, _passwordController.text);
+            Hero(
+              tag: 'button1',
+              child: AuthButton(
+                onPressed: () async {
+                  setState(() {
+                    _normalLoading = true;
+                  });
+                  dynamic response = await normalSignIn(
+                      _emailController.text, _passwordController.text);
 
-                setState(() {
-                  _normalLoading = false;
-                  if (response is User) {
-                    _success = true;
-                    _error = null;
-                    _userEmail = response.email!;
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, HomeScreen.id, (route) => false);
-                  } else {
-                    _success = false;
-                    _error = response;
-                  }
-                });
-              },
-              title: 'Sign In',
-              isLoading: _normalLoading,
+                  setState(() {
+                    _normalLoading = false;
+                    if (response is User) {
+                      _success = true;
+                      _error = null;
+                      _userEmail = response.email!;
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, HomeScreen.id, (route) => false);
+                    } else {
+                      _success = false;
+                      _error = response;
+                    }
+                  });
+                },
+                title: 'Sign In',
+                isLoading: _normalLoading,
+              ),
             ),
-            AuthButton(
-              onPressed: () async {
-                setState(() {
-                  _googleLoading = true;
-                });
-                dynamic response = await signInUsingGoogle();
-                setState(() {
-                  _googleLoading = false;
-                  if (response == null) {
-                    _success = false;
-                    _error = 'Google Login Failed.';
-                  } else {
-                    _success = true;
-                    _error = null;
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, HomeScreen.id, (route) => false);
-                  }
-                });
-              },
-              title: 'Google Sign In',
-              reverse: true,
-              isLoading: _googleLoading,
+            Hero(
+              tag: 'button2',
+              child: AuthButton(
+                onPressed: () async {
+                  // Navigator.pushNamedAndRemoveUntil(
+                  //     context, HomeScreen.id, (route) => false);
+                  setState(() {
+                    _googleLoading = true;
+                  });
+                  dynamic response = await signInUsingGoogle();
+                  setState(() {
+                    _googleLoading = false;
+                    if (response == null) {
+                      _success = false;
+                      _error = 'Google Login Failed.';
+                    } else {
+                      _success = true;
+                      _error = null;
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, HomeScreen.id, (route) => false);
+                    }
+                  });
+                },
+                title: 'Sign In Using Google',
+                reverse: true,
+                isLoading: _googleLoading,
+                isGoogleButton: true,
+              ),
             ),
             TextButton(
               onPressed: () {
-                Navigator.pushNamed(context, RegistrationScreen.id);
+                Navigator.pushReplacementNamed(context, RegistrationScreen.id);
               },
               child: Text(
                 'Don\'t have an account? Sign up.',

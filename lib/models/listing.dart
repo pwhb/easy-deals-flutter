@@ -1,4 +1,4 @@
-class Listing {
+class ListingModel {
   String itemName;
   String sellerUid;
   bool isUsed;
@@ -12,7 +12,7 @@ class Listing {
   String? description;
   List<String>? itemPhotos;
 
-  Listing({
+  ListingModel({
     required this.itemName,
     required this.sellerUid,
     required this.createdAt,

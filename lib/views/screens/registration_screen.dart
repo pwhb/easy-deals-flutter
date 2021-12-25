@@ -1,6 +1,7 @@
 import 'package:easy_deals/services/auth_controllers.dart';
+import 'package:easy_deals/views/components/auth_button.dart';
+import 'package:easy_deals/views/screens/home_screen.dart';
 import 'package:easy_deals/views/screens/login_screen.dart';
-import 'package:easy_deals/views/widgets/AuthButton.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +16,7 @@ class RegistrationScreen extends StatefulWidget {
 class _RegistrationScreenState extends State<RegistrationScreen> {
   bool _hidePassword = true;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -41,21 +43,27 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         child: ListView(
           children: <Widget>[
             const SizedBox(
-              height: 100.0,
+              height: 70.0,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Image.asset(
-                  'images/trolley.png',
-                  width: 40.0,
+                Hero(
+                  tag: 'logo',
+                  child: Image.asset(
+                    'images/trolley.png',
+                    width: 40.0,
+                  ),
                 ),
-                Text(
-                  'Create your account',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 20.0,
+                Hero(
+                  tag: 'title-text',
+                  child: Text(
+                    'Create your account',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontWeight: FontWeight.w900,
+                      fontSize: 20.0,
+                    ),
                   ),
                 )
               ],
@@ -67,7 +75,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               key: _formKey,
               child: Column(
                 children: <Widget>[
-                  TextFormField(
+                  TextField(
+                    controller: _nameController,
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.person),
+                      border: OutlineInputBorder(),
+                      labelText: 'Name',
+                      contentPadding: EdgeInsets.all(10.0),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  TextField(
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(
@@ -80,7 +100,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   const SizedBox(
                     height: 20.0,
                   ),
-                  TextFormField(
+                  TextField(
                     controller: _passwordController,
                     obscureText: _hidePassword,
                     decoration: InputDecoration(
@@ -118,49 +138,56 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             const SizedBox(
               height: 20.0,
             ),
-            AuthButton(
-              onPressed: () async {
-                setState(() {
-                  _normalLoading = true;
-                });
-                dynamic response = await normalSignUp(
-                    _emailController.text, _passwordController.text);
+            Hero(
+              tag: 'button1',
+              child: AuthButton(
+                onPressed: () async {
+                  setState(() {
+                    _normalLoading = true;
+                  });
+                  dynamic response = await normalSignUp(_nameController.text,
+                      _emailController.text, _passwordController.text);
 
-                setState(() {
-                  _normalLoading = false;
-                  if (response is User) {
-                    _success = true;
-                    _error = null;
-                    _userEmail = response.email!;
-                  } else {
-                    _success = false;
-                    _error = response;
-                  }
-                });
-                // Navigator.pushNamedAndRemoveUntil(
-                //     context, HomeScreen.id, (route) => false);
-              },
-              title: 'Sign Up',
-              isLoading: _normalLoading,
+                  setState(() {
+                    _normalLoading = false;
+                    if (response is User) {
+                      _success = true;
+                      _error = null;
+                      _userEmail = response.email!;
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, HomeScreen.id, (route) => false);
+                    } else {
+                      _success = false;
+                      _error = response;
+                    }
+                  });
+                },
+                title: 'Sign Up',
+                isLoading: _normalLoading,
+              ),
             ),
-            AuthButton(
-              onPressed: () async {
-                setState(() {
-                  _googleLoading = true;
-                });
-                // Navigator.pushNamedAndRemoveUntil(
-                //     context, HomeScreen.id, (route) => false);
-                setState(() {
-                  _googleLoading = false;
-                });
-              },
-              title: 'Google Sign In',
-              reverse: true,
-              isLoading: _googleLoading,
+            Hero(
+              tag: 'button2',
+              child: AuthButton(
+                onPressed: () async {
+                  setState(() {
+                    _googleLoading = true;
+                  });
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, HomeScreen.id, (route) => false);
+                  setState(() {
+                    _googleLoading = false;
+                  });
+                },
+                title: 'Sign Up Using Google',
+                reverse: true,
+                isLoading: _googleLoading,
+                isGoogleButton: true,
+              ),
             ),
             TextButton(
               onPressed: () {
-                Navigator.pushNamed(context, LoginScreen.id);
+                Navigator.pushReplacementNamed(context, LoginScreen.id);
               },
               child: Text(
                 'Already have an account? Sign in.',
