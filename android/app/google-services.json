@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1042614869365",
+    "project_id": "losersclub-easydeals",
+    "storage_bucket": "losersclub-easydeals.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1042614869365:android:d20a38dc41045d3bc0873c",
+        "android_client_info": {
+          "package_name": "com.losersclub.easy_deals"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1042614869365-4bjr0mdq5am94fo0lk2rgfethq37nqgj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnsIkY86YyX3jIXLNsMjYxx37Uj26YGzU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1042614869365-4bjr0mdq5am94fo0lk2rgfethq37nqgj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
